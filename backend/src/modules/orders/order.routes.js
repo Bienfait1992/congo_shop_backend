@@ -377,19 +377,19 @@ router.post("/checkout", authenticate, async (req, res) => {
       where: { id: shopIds[0] },
     });
 
-    console.log("🏪 SHOP:", shop);
+    console.log("SHOP:", shop);
 
     if (!shop) {
-      console.log("❌ SHOP NOT FOUND");
+      console.log("SHOP NOT FOUND");
       return res.status(404).json({ error: "Shop invalide" });
     }
 
-    console.log("✅ SHOP OK");
+    console.log("SHOP OK");
 
     // =========================
     // DELIVERY MEN
     // =========================
-    console.log("🚚 FETCH DELIVERY MEN...");
+    console.log("FETCH DELIVERY MEN...");
 
     const deliveryMen = await prisma.deliveryMan.findMany({
       where: {
@@ -518,13 +518,13 @@ router.post("/checkout", authenticate, async (req, res) => {
 
       console.log("✅ ORDER CREATED:", order.id);
 
-      console.log("📩 NOTIF ORDER INPUT:", {
+      console.log("NOTIF ORDER INPUT:", {
   userId: req.userId,
   orderId: order.id,
 });
 
 
-console.log("📦 ORDER NOTIF DATA:", {
+console.log("ORDER NOTIF DATA:", {
   userId: req.userId,
   entityId: order.id,
   type: "ORDER",
@@ -540,7 +540,7 @@ await notificationService.create({
 });
 
 
-console.log("🚚 DELIVERY NOTIF DATA:", {
+console.log("DELIVERY NOTIF DATA:", {
   userId: closest.userId,
   entityId: order.id,
   type: "DELIVERY",
@@ -628,13 +628,24 @@ router.get("/:id", authenticate, async (req, res) => {
           variant: true,
         },
       },
+     
       delivery: {
-        include: {
-          deliveryMan: true,
-        },
-      },
+  include: {
+    deliveryMan: {
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            phone: true
+          }
+        }
+      }
+    }
+  }
+},
 
-      // 🔥 AJOUT ICI
+      //AJOUT ICI
       shop: {
         select: {
           id: true,

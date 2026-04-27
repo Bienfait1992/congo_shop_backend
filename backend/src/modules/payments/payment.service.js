@@ -1,35 +1,80 @@
 import { PrismaClient } from "@prisma/client";
+import { notificationService } from "../notifications/services/notificationService.js";
 
 const prisma = new PrismaClient();
 
-// Simulation paiement (remplace plus tard par Stripe / API Mobile Money)
-export async function processPayment({ amount, method, orderId }) {
+export async function processPayment({ method, orderId }, userId) {
 
-  // ⚠️ Simulation
-  let status = "SUCCESS";
+  return await prisma.$transaction(async (tx) => {
 
-  if (method === "CASH") {
-    status = "PENDING"; // paiement à la livraison
-  }
+    // 🔎 Vérifier commande
+    const order = await tx.order.findUnique({
+      where: { id: orderId },
+    });
 
-  // Vérifier si paiement existe déjà
-  const existing = await prisma.payment.findUnique({
-    where: { orderId }
-  });
-
-  if (existing) {
-    throw new Error("Paiement déjà effectué pour cette commande");
-  }
-
-  const payment = await prisma.payment.create({
-    data: {
-      amount,
-      method,
-      status,
-      orderId,
-      transactionId: `TX-${Date.now()}`
+    if (!order) {
+      throw new Error("Commande introuvable");
     }
-  });
 
-  return payment;
+    if (order.clientId !== userId) {
+      throw new Error("Accès refusé");
+    }
+
+    //Paiement déjà existant
+    const existing = await tx.payment.findUnique({
+      where: { orderId }
+    });
+
+    if (existing) {
+      throw new Error("Paiement déjà effectué");
+    }
+
+    //montant réel
+    const amount = order.totalPrice;
+
+    //status
+    let status = "SUCCESS";
+
+    if (method === "CASH") {
+      status = "PENDING";
+    }
+
+    //créer paiement
+    const payment = await tx.payment.create({
+      data: {
+        amount,
+        method,
+        status,
+        orderId,
+        userId,
+        transactionId: `TX-${Date.now()}`
+      }
+    });
+
+    // =========================
+    //SI paiement réussi
+    // =========================
+    if (status === "SUCCESS") {
+
+      //MAJ COMMANDE
+      await tx.order.update({
+        where: { id: orderId },
+        data: {
+          status: "CONFIRMED"
+        }
+      });
+
+      //NOTIFICATION
+      await notificationService.create({
+        tx, //IMPORTANT
+        userId,
+        title: "Paiement confirmé",
+        message: "Votre commande a été payée avec succès",
+        type: "PAYMENT",
+        entityId: orderId,
+      });
+    }
+
+    return payment;
+  });
 }
