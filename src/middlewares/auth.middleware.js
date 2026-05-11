@@ -22,25 +22,26 @@
 
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "../prisma/client.js"
+// const prisma = new PrismaClient();
 
 export const authenticate = async (req, res, next) => {
   console.log("=== Middleware authenticate ===");
 
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
-    console.log("❌ Token manquant dans l'entête");
+    console.log("Token manquant dans l'entête");
     return res.status(401).json({ message: "Token manquant" });
   }
 
   const token = authHeader.split(" ")[1];
   if (!token) {
-    console.log("❌ Token manquant après split");
+    console.log("Token manquant après split");
     return res.status(401).json({ message: "Token manquant" });
   }
 
-  console.log("🔑 Token reçu :", token);
+  console.log("Token reçu :", token);
 
   try {
     // Décoder le token

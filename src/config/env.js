@@ -19,10 +19,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 if (!process.env.DATABASE_URL) {
-  console.warn("⚠️ DATABASE_URL non définie !");
+  console.warn("DATABASE_URL non définie !");
 }
 if (!process.env.JWT_SECRET) {
-  console.warn("⚠️ JWT_SECRET non définie, utilisez une valeur sécurisée !");
+  console.warn("JWT_SECRET non définie, utilisez une valeur sécurisée !");
 }
 
 export const env = {

@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "../../prisma/client.js"
+// const prisma = new PrismaClient();
 
 // ✅ Créer un review
 export async function createReview(userId, data) {

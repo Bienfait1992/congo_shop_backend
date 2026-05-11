@@ -50,16 +50,17 @@
 
 
 import { Server } from "socket.io";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "../prisma/client.js"
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 let io;
 
-// 🔥 SOCKET MAPS
+//SOCKET MAPS
 const messageSockets = new Map();
 const deliverySockets = new Map();
-const notificationSockets = new Map(); // ✅ AJOUT
+const notificationSockets = new Map(); //AJOUT
 
 export const initSocket = (server) => {
   io = new Server(server, { cors: { origin: "*" } });
@@ -68,7 +69,7 @@ export const initSocket = (server) => {
     console.log("User connecté:", socket.id);
 
     // =============================
-    // 📩 CHAT
+    //CHAT
     // =============================
     socket.on("register_message", (userId) => {
       socket.join(userId);
@@ -77,7 +78,7 @@ export const initSocket = (server) => {
     });
 
     // =============================
-    // 🚚 LIVRAISON
+    //LIVRAISON
     // =============================
     socket.on("register_delivery", (deliveryManId) => {
       deliverySockets.set(deliveryManId, socket.id);

@@ -1,5 +1,6 @@
 import express from "express"; // ou const express = require("express") si commonjs
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "./src/prisma/client.js"
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -37,7 +38,7 @@ const server = http.createServer(app)
 initSocket(server);
 
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 // const PORT = 3000;
 
 app.use(cors());

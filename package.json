@@ -1,6 +1,7 @@
 {
+"type": "module",
    "scripts": {
-      "dev": "nodemon server.js",
+      "dev": "node server.js",
       "start": "node server.js",
       "migrate": "npx prisma migrate dev",
       "generate": "npx prisma generate",

@@ -76,10 +76,11 @@
 
 
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "../../prisma/client.js";
 
 const router = express.Router();
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 router.get("/", async (req, res) => {
   try {

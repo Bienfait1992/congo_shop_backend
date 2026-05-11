@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
+import {prisma} from "../../prisma/client.js";
 
 // Simulation paiement (remplace plus tard par Stripe / API Mobile Money)
 export async function processPayment({ amount, method, orderId }) {

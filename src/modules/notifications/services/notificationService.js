@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "../../../prisma/client.js"
 import { getIO } from "../../../sockets/socket.js";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export const notificationService = {
   async create({

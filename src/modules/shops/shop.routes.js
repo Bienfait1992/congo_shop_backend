@@ -1,5 +1,6 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "../../prisma/client.js"
 import { authenticate } from "../../middlewares/auth.middleware.js";
 import multer from "multer";
 import path from "path";
@@ -8,7 +9,7 @@ import slugify from "slugify";
 import { v4 } from "uuid";
 import { v4 as uuidv4 } from "uuid";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 const router = express.Router();
 
 // ======================

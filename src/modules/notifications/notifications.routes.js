@@ -1,9 +1,10 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import { authenticate } from "../../middlewares/auth.middleware.js";
+import {prisma} from "../../prisma/client.js"
 import { notificationService } from "./services/notificationService.js";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 const router = express.Router();
 
 /**
